@@ -1,182 +1,133 @@
-# 🐱🐶 Cat vs Dog Classification
+# 🐱 Cat vs Dog Image Classification
 
-**Image Processing Course — Phase 01**
+> Binary image classification using CNN from Scratch and Transfer Learning (MobileNetV2)
 
----
-
-## 📌 Overview
-
-This project focuses on binary image classification to distinguish between **cats and dogs** using deep learning techniques.
-
-In Phase 01, the work focuses on:
-
-* Understanding the dataset
-* Analyzing image properties
-* Exploring brightness and contrast effects
-
-Future phases will include building CNN and Transfer Learning models.
+**Elsewedy University of Technology — Image Processing Course | Spring 2026**
 
 ---
 
-## 📂 Project Structure
+## 👥 Team Members
+
+| Name | ID |
+|------|----|
+| Basmala Mohamed | 240103118 |
+| Sama Walid | 240102884 |
+| Mahmoud Hesham | 240101375 |
+
+**Supervisor:** Eng. Hend Adel Ahmed
+
+---
+
+## 📌 Project Overview
+
+This project builds and compares two deep learning models to classify images as either a **Cat** or a **Dog**:
+
+- **Model 1:** Convolutional Neural Network (CNN) built from scratch
+- **Model 2:** Transfer Learning using MobileNetV2 (pretrained on ImageNet)
+
+A Streamlit web application is included for real-time prediction.
+
+---
+
+## 📊 Results
+
+| Metric | CNN from Scratch | Transfer Learning |
+|--------|:-:|:-:|
+| Accuracy | 74.22% | **97.78%** |
+| Precision | 72.06% | **96.94%** |
+| Recall | 79.11% | **98.67%** |
+| F1-Score | 75.42% | **97.80%** |
+| AUC | 83.20% | **99.91%** |
+
+---
+
+## 📁 Project Structure
 
 ```
-image_processing_project/
-│
-├── data/
-│   ├── raw/            # Original dataset (not uploaded)
-│   └── subset/         # 6,000 selected images (3k cats / 3k dogs)
+Cat-vs-Dog-classification/
 │
 ├── notebooks/
-│   └── analysis.ipynb  # Phase 01 analysis
+│   ├── analysis.ipynb             # Phase 1 — dataset exploration & histogram analysis
+│   ├── preprocessing.ipynb        # Resizing, normalization, augmentation, splitting
+│   ├── cnn_model.ipynb            # CNN from scratch — training & evaluation
+│   └── transfer_learning.ipynb    # MobileNetV2 transfer learning & fine-tuning
 │
-├── src/
-│   └── subset.py       # Script to create dataset subset
+├── results/
+│   ├── cnn_training_curves.png
+│   ├── cnn_confusion_matrix.png
+│   ├── cnn_roc_curve.png
+│   ├── tl_training_curves.png
+│   ├── tl_confusion_matrix.png
+│   └── tl_roc_curve.png
 │
-├── models/             # Saved models (Phase 02+)
-├── results/            # Output images & graphs
-│
+├── app.py                         # Streamlit web application
 ├── requirements.txt
-└── README.md
+└── .gitignore
 ```
 
----
-
-## 📊 Dataset
-
-* **Name:** Dogs vs Cats
-* **Source:** Source: https://www.kaggle.com/datasets/karakaggle/kaggle-cat-vs-dog-dataset
-* **Original Size:** 25,000 images
-* **Subset Used:** 6,000 images (balanced)
-
-💡 A smaller subset was used to reduce training time while keeping good diversity.
-⚠️ Dataset is not included in this repository due to size limits.
-Download it manually from Kaggle and place it inside data/raw/
+> **Note:** The `data/` and `models/` folders are excluded from this repo due to file size limits.
+> Download the dataset from [Kaggle](https://www.kaggle.com/datasets/karakaggle/kaggle-cat-vs-dog-dataset).
 
 ---
 
-## ✅ Phase 01 — Completed Tasks
+## 🗃️ Dataset
 
-### 1. Dataset Exploration
-
-* Displayed sample images
-* Counted number of images per class
-
-📌 Output: `task1_sample_images.png`
+- **Source:** [Kaggle — Dogs vs. Cats](https://www.kaggle.com/datasets/karakaggle/kaggle-cat-vs-dog-dataset)
+- **Subset used:** 6,000 images (3,000 cats + 3,000 dogs)
+- **Split:** 70% train / 15% validation / 15% test
+- **Class balance:** Perfectly balanced (50% each)
 
 ---
 
-### 2. Data Understanding
+## 🧠 Model Architectures
 
-* Analyzed:
+### CNN from Scratch
+4 convolutional blocks (Conv2D → BatchNorm → ReLU → MaxPooling) with increasing filters (32 → 64 → 128 → 256), followed by Flatten → Dense(512) → Dropout(0.5) → Sigmoid output.
 
-  * Image type (RGB)
-  * Bit depth (8-bit)
-  * Resolution distribution
-
-📌 Output: `task2_resolution_distribution.png`
-
----
-
-### 3. Histogram Analysis
-
-* Generated:
-
-  * Grayscale histogram
-  * RGB channel histograms
-* Calculated brightness & contrast
-
-📌 Output: `task3_histogram_analysis.png`
+### Transfer Learning — MobileNetV2
+- **Phase 1:** MobileNetV2 base frozen, custom head trained (GlobalAvgPool → Dense(256) → Dropout → Dense(128) → Sigmoid)
+- **Phase 2:** Last 30 layers unfrozen for fine-tuning at learning rate 0.0001
 
 ---
 
-### 4. Brightness & Contrast Adjustment
+## 🚀 How to Run
 
-* Applied:
+### 1. Clone the repo
+```bash
+git clone https://github.com/basmalaabdulhamed/Cat-vs-Dog-classification.git
+cd Cat-vs-Dog-classification
+```
 
-  * Brightness increase/decrease
-  * Contrast increase/decrease
-* Compared histograms before & after
-
-📌 Outputs:
-
-* `task4_brightness_contrast.png`
-* `task4_histograms_comparison.png`
-
----
-
-## 🔍 Key Insights
-
-* Images are **RGB, 8-bit**, avg size ≈ **300×300 px**
-* Pixel values mostly in **mid-range (100–180)**
-* Dataset has **lighting variation**
-* Preprocessing (normalization) is important for modeling
-
----
-
-## ⚙️ How to Run
-
-### 1. Install dependencies
-
+### 2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Download dataset
-
-Download from Kaggle and extract into:
-
-```
-data/raw/
-```
-
-### 3. Create subset
-
+### 3. Run the Streamlit app
 ```bash
-python src/subset.py
+streamlit run app.py
 ```
 
-### 4. Run analysis
-
-Open:
-
-```
-notebooks/analysis.ipynb
-```
-
----
-
-## 🚀 Next Phases
-
-* Image preprocessing (resize, normalize, augment)
-* CNN model from scratch
-* Transfer Learning (MobileNetV2)
-* Model evaluation (accuracy, confusion matrix, ROC)
+> Make sure you have the trained model file `models/tl_final.keras` in the `models/` folder before running the app.
 
 ---
 
 ## 🛠️ Tech Stack
 
-* Python
-* TensorFlow / Keras
-* NumPy
-* Matplotlib
-* Pillow (PIL)
-* Jupyter Notebook
+- Python 3.x
+- TensorFlow / Keras
+- NumPy, PIL (Pillow)
+- Matplotlib, Seaborn
+- Scikit-learn
+- Streamlit
 
 ---
 
-## 📌 Deliverables
+## 📈 Visualizations
 
-* ✅ Subset creation script
-* ✅ Analysis notebook
-* ✅ Results (plots & visualizations)
-* ✅ Technical report
-* ⏳ Presentation slides
+All result plots are saved in the `results/` folder:
 
----
-## Sample Results
-
-![Sample Images](results/task1_sample_images.png)
-
-![Histogram Analysis](results/task3_histogram_analysis.png)
+- Training & Validation accuracy/loss curves
+- Confusion matrices (heatmap)
+- ROC curves with AUC scores
+- Sample prediction grids
